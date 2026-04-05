@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Video, Users, Shield, Zap, MessageCircle, Globe } from 'lucide-react';
+import { Video, Users, Shield, Zap, Globe, ArrowRight } from 'lucide-react';
 import { useSocket } from '../contexts/SocketContext';
 import toast from 'react-hot-toast';
 
@@ -16,7 +16,7 @@ const Home: React.FC = () => {
 
   const handleStartChat = () => {
     if (!username.trim()) {
-      toast.error('გთხოვთ შეიყვანოთ თქვენი სახელი');
+      toast.error('გთხოვთ შეიყვანოთ სახელი');
       return;
     }
     localStorage.setItem('username', username);
@@ -24,198 +24,107 @@ const Home: React.FC = () => {
     navigate('/chat');
   };
 
-  const features = [
-    { icon: <Video className="w-5 h-5" />, title: 'ვიდეო ჩატი', description: 'HD ხარისხის ვიდეო კავშირი' },
-    { icon: <Globe className="w-5 h-5" />, title: 'მსოფლიო', description: 'ნებისმიერ ქვეყნიდან მეგობრები' },
-    { icon: <Shield className="w-5 h-5" />, title: 'დაცული', description: 'სრული კონფიდენციალურობა' },
-    { icon: <Zap className="w-5 h-5" />, title: 'მყისიერი', description: 'სწრაფი დაკავშირება' },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#080808] text-white relative overflow-x-hidden" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-      {/* Ambient background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[10%] w-[600px] h-[600px] rounded-full opacity-[0.07]"
-          style={{ background: 'radial-gradient(circle, #7c3aed, transparent 70%)' }} />
-        <div className="absolute bottom-[-10%] right-[5%] w-[500px] h-[500px] rounded-full opacity-[0.05]"
-          style={{ background: 'radial-gradient(circle, #ec4899, transparent 70%)' }} />
-        {/* Grid */}
-        <div className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
-            backgroundSize: '60px 60px'
-          }} />
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-purple-500/30 overflow-hidden font-['DM_Sans']">
+      {/* Dynamic Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-pink-600/10 blur-[120px]" />
       </div>
 
-      {/* Header */}
-      <header className="relative z-10 border-b border-white/[0.06] backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #7c3aed, #ec4899)' }}>
-              <Video className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-semibold tracking-tight">Shtabi<span className="text-purple-400">.ge</span></span>
+      <nav className="relative z-10 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+            <Video className="w-5 h-5 text-white" />
           </div>
-
-          <div className="flex items-center gap-6 text-sm">
-            <div className="flex items-center gap-2 text-gray-400">
-              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-400' : 'bg-red-400'}`}
-                style={{ boxShadow: isConnected ? '0 0 8px #34d399' : '0 0 8px #f87171' }} />
-              <span>{isConnected ? 'ონლაინ' : 'გათიშული'}</span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-full px-4 py-1.5">
-              <Users className="w-3.5 h-3.5 text-purple-400" />
-              <span className="text-white font-medium">{onlineUsers}</span>
-              <span className="text-gray-500">ონლაინ</span>
-            </div>
+          <span className="text-xl font-bold tracking-tight">Shtabi<span className="text-purple-500">.ge</span></span>
+        </div>
+        
+        <div className="hidden md:flex items-center gap-6">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08]">
+            <div className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
+            <span className="text-sm font-medium text-gray-300">{onlineUsers} ხაზზეა</span>
           </div>
         </div>
-      </header>
+      </nav>
 
-      {/* Hero */}
-      <main className="relative z-10 max-w-6xl mx-auto px-6 pt-20 pb-24">
-        <div className="max-w-2xl mx-auto text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 24 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="inline-flex items-center gap-2 bg-white/[0.04] border border-white/[0.1] rounded-full px-4 py-1.5 mb-8 text-sm text-gray-400">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-              {onlineUsers} ადამიანი ახლა ჩატავს
-            </div>
-
-            <h1 className="text-5xl sm:text-6xl font-bold mb-5 leading-[1.1] tracking-tight">
-              შეხვდი{' '}
-              <span style={{
-                background: 'linear-gradient(135deg, #a78bfa, #ec4899, #f97316)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>ახალ მეგობრებს</span>
-            </h1>
-            <p className="text-lg text-gray-400 leading-relaxed">
-              შემთხვევითი ვიდეო ჩატი მთელი მსოფლიოდან ადამიანებთან.
-              უსაფრთხო, სწრაფი, უფასო.
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Form Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 32 }}
-          transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-md mx-auto mb-20"
+      <main className="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center pt-12 lg:pt-24">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <div className="rounded-2xl border border-white/[0.08] overflow-hidden"
-            style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)' }}>
-            <div className="p-8">
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">სახელი</label>
-                  <input
-                    type="text"
-                    placeholder="შეიყვანეთ თქვენი სახელი"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleStartChat()}
-                    maxLength={20}
-                    className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 text-sm transition-all outline-none"
-                    style={{
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '1px solid rgba(255,255,255,0.08)',
-                    }}
-                    onFocus={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.5)'}
-                    onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">ინტერესები <span className="normal-case text-gray-600">(სურვილისამებრ)</span></label>
-                  <input
-                    type="text"
-                    placeholder="მუსიკა, სპორტი, კინო..."
-                    value={interests}
-                    onChange={(e) => setInterests(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 text-sm transition-all outline-none"
-                    style={{
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '1px solid rgba(255,255,255,0.08)',
-                    }}
-                    onFocus={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.5)'}
-                    onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
-                  />
-                </div>
+          <h1 className="text-6xl lg:text-7xl font-bold leading-[1.1] mb-6">
+            ესაუბრე <br />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400">
+              სამყაროს
+            </span>
+          </h1>
+          <p className="text-lg text-gray-400 mb-10 max-w-lg leading-relaxed font-light">
+            აღმოაჩინე ახალი მეგობრები, გაუზიარე იდეები და ისაუბრე უსაფრთხოდ ყველაზე სწრაფ ქართულ ვიდეო ჩატში.
+          </p>
+          
+          <div className="grid grid-cols-2 gap-6">
+            {[
+              { icon: <Shield className="w-5 h-5 text-purple-400" />, text: "დაცული კავშირი" },
+              { icon: <Zap className="w-5 h-5 text-pink-400" />, text: "HD ხარისხი" }
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.08]">{item.icon}</div>
+                <span className="text-sm text-gray-300 font-medium">{item.text}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 blur-3xl rounded-[3rem]" />
+          <div className="relative bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl p-8 lg:p-10 rounded-[2.5rem] shadow-2xl">
+            <h3 className="text-xl font-semibold mb-8">დაიწყე ახლავე</h3>
+            
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-widest ml-1">შენი სახელი</label>
+                <input 
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="მაგ: გიორგი"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] focus:border-purple-500/50 focus:ring-4 ring-purple-500/5 rounded-2xl px-5 py-4 outline-none transition-all text-sm"
+                />
               </div>
 
-              <button
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-widest ml-1">ინტერესები</label>
+                <input 
+                  type="text"
+                  value={interests}
+                  onChange={(e) => setInterests(e.target.value)}
+                  placeholder="მაგ: მუსიკა, კოდინგი..."
+                  className="w-full bg-white/[0.03] border border-white/[0.08] focus:border-purple-500/50 focus:ring-4 ring-purple-500/5 rounded-2xl px-5 py-4 outline-none transition-all text-sm"
+                />
+              </div>
+
+              <button 
                 onClick={handleStartChat}
-                className="w-full py-3.5 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2.5 transition-all duration-300 hover:opacity-90 active:scale-[0.98]"
-                style={{ background: 'linear-gradient(135deg, #7c3aed, #ec4899)' }}
+                className="w-full group bg-white text-black font-bold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-purple-500 hover:text-white transition-all duration-300 active:scale-95 shadow-xl shadow-white/5"
               >
-                <Video className="w-4 h-4" />
-                დაიწყე ჩატი
+                შესვლა ჩატში
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
-
-            <div className="border-t border-white/[0.06] px-8 py-4">
-              <p className="text-xs text-gray-600 text-center">
-                კავშირის დაწყებით ეთანხმები გამოყენების{' '}
-                <span className="text-gray-500 cursor-pointer hover:text-gray-400">წესებს</span>
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Features */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 24 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto"
-        >
-          {features.map((f, i) => (
-            <div key={i}
-              className="rounded-xl p-5 border border-white/[0.06] transition-all duration-300 hover:border-white/[0.12] group"
-              style={{ background: 'rgba(255,255,255,0.02)' }}>
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 text-purple-400 group-hover:scale-110 transition-transform"
-                style={{ background: 'rgba(124,58,237,0.1)' }}>
-                {f.icon}
-              </div>
-              <h3 className="text-sm font-semibold text-white mb-1">{f.title}</h3>
-              <p className="text-xs text-gray-500 leading-relaxed">{f.description}</p>
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Bottom stats */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: mounted ? 1 : 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="flex items-center justify-center gap-8 mt-16 text-sm text-gray-600"
-        >
-          <div className="flex items-center gap-2">
-            <MessageCircle className="w-4 h-4 text-blue-500/60" />
-            <span>24/7 ჩატი</span>
-          </div>
-          <div className="w-1 h-1 rounded-full bg-white/10" />
-          <div className="flex items-center gap-2">
-            <Shield className="w-4 h-4 text-emerald-500/60" />
-            <span>კონფიდენციალური</span>
-          </div>
-          <div className="w-1 h-1 rounded-full bg-white/10" />
-          <div className="flex items-center gap-2">
-            <Globe className="w-4 h-4 text-orange-500/60" />
-            <span>გლობალური</span>
+            
+            <p className="text-center text-[11px] text-gray-500 mt-6 leading-relaxed">
+              შესვლით თქვენ ეთანხმებით პლატფორმის <span className="underline cursor-pointer">წესებსა და პირობებს</span>
+            </p>
           </div>
         </motion.div>
       </main>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
-      `}</style>
     </div>
   );
 };
