@@ -1,0 +1,108 @@
+@import url("//cdn.web-fonts.ge/fonts/bpg-mrgvlovani/css/bpg-mrgvlovani.min.css");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-white;
+    @apply font-sans;
+  }
+  
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(59 130 246) rgb(30 41 59);
+  }
+  
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: rgb(30 41 59);
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background: rgb(59 130 246);
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply bg-gray-900/80 backdrop-blur-lg border border-gray-800;
+  }
+  
+  .neon-glow {
+    @apply shadow-lg shadow-purple-500/50;
+  }
+  
+  .video-container {
+    @apply relative rounded-lg overflow-hidden bg-gray-900;
+    @apply border border-gray-700;
+    @apply shadow-2xl;
+  }
+  
+  .chat-bubble {
+    @apply max-w-xs px-4 py-2 rounded-2xl;
+    @apply break-words;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-purple-500 to-pink-500;
+    @apply hover:from-purple-600 hover:to-pink-600;
+    @apply text-white font-semibold py-3 px-6 rounded-full;
+    @apply transition-all duration-300 transform hover:scale-105;
+    @apply shadow-lg shadow-purple-500/30;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-800 hover:bg-gray-700;
+    @apply text-white font-medium py-2 px-4 rounded-full;
+    @apply transition-all duration-300;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+
+*{
+  font-family: "BPG Mrgvlovani", sans-serif;
+}
